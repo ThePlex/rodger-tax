@@ -1,4 +1,5 @@
-/* Sterling Enterprises: entirely fictional, browser-only TWB roleplay application. */
+/* Sterling Reserve site logic. */
+const el=id=>document.getElementById(id);
 const raw = `
 Pyrotechnic Punch Tax|5000|Per punch accompanied by pyro.
 Unnecessary Entrance Tax|2500|Entering a room with entrance music.
@@ -151,7 +152,6 @@ document.getElementById('assetSearch').addEventListener('input',renderCollection
 document.getElementById('collectionGrid').addEventListener('click',e=>{const b=e.target.closest('[data-inspect]');if(!b)return;const x=collection.find(a=>a.id===Number(b.dataset.inspect));if(!x)return;el('assetSpotlight').classList.remove('hide');el('assetSpotlight').innerHTML=`<div class="eyebrow">ASSET CERTIFICATE #SE-${String(x.id).padStart(4,'0')}</div><h2>${safe(x.name)}</h2><p>${safe(x.description)}</p><div class="flex"><span class="badge">REGISTERED TO RODGER THE DODGER</span><strong style="color:#efd18b">${safe(x.value)}</strong></div>`;el('assetSpotlight').scrollIntoView({behavior:'smooth',block:'nearest'})});
 const taxes = raw.trim().split('\n').map((line,i)=>{const [name,fee,description]=line.split('|');return {id:i+1,name,fee:Number(fee),description,category:categories[i<40?0:i<60?1:i<80?2:i<90?3:4]}});
 const money = n=>new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP',maximumFractionDigits:0}).format(n);
-const el=id=>document.getElementById(id);
 const safe=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let charges=[];let invoiceSerial=1;
 try{const saved=JSON.parse(localStorage.getItem('sterlingDraft')||'{}');charges=Array.isArray(saved.charges)?saved.charges.filter(c=>taxes.some(t=>t.id===c.id)&&Number.isInteger(c.qty)&&c.qty>=1&&c.qty<=999):[];invoiceSerial=Number.isInteger(saved.invoiceSerial)&&saved.invoiceSerial>0?saved.invoiceSerial:1;el('superstar').value=typeof saved.superstar==='string'?saved.superstar.slice(0,80):'';}catch{}
